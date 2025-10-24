@@ -18,20 +18,20 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/users": {
+        "/events": {
             "get": {
-                "description": "Get all users.",
+                "description": "Get all events.",
                 "tags": [
-                    "users"
+                    "events"
                 ],
-                "summary": "Get all users.",
+                "summary": "Get all events.",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/models.Event"
                             }
                         }
                     },
@@ -41,17 +41,17 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/events/{id}": {
             "get": {
-                "description": "Get a user.",
+                "description": "Get an event.",
                 "tags": [
-                    "users"
+                    "events"
                 ],
-                "summary": "Get a user.",
+                "summary": "Get an event.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User UUID formatted ID",
+                        "description": "Event UUID formatted ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -61,7 +61,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.Event"
                         }
                     },
                     "422": {
@@ -75,13 +75,42 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.User": {
+        "models.Event": {
             "type": "object",
             "properties": {
+                "agenda_id": {
+                    "description": "ID de l'agenda source",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description complète",
+                    "type": "string"
+                },
+                "end_date": {
+                    "description": "Date/heure fin (DTEND)",
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
-                "name": {
+                "last_modified": {
+                    "description": "Dernière modification",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Salle (ex: \"IS_A104\")",
+                    "type": "string"
+                },
+                "start_date": {
+                    "description": "Date/heure début (DTSTART)",
+                    "type": "string"
+                },
+                "summary": {
+                    "description": "Titre du cours (ex: \"CM Big Data\")",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "UID de l'événement iCal",
                     "type": "string"
                 }
             }
@@ -96,7 +125,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{"http"},
 	Title:            "middleware/example",
-	Description:      "API to manage users.",
+	Description:      "API to manage events.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

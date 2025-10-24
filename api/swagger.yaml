@@ -1,40 +1,62 @@
 basePath: /
 definitions:
-  models.User:
+  models.Event:
     properties:
+      agenda_id:
+        description: ID de l'agenda source
+        type: string
+      description:
+        description: Description complète
+        type: string
+      end_date:
+        description: Date/heure fin (DTEND)
+        type: string
       id:
         type: string
-      name:
+      last_modified:
+        description: Dernière modification
+        type: string
+      location:
+        description: 'Salle (ex: "IS_A104")'
+        type: string
+      start_date:
+        description: Date/heure début (DTSTART)
+        type: string
+      summary:
+        description: 'Titre du cours (ex: "CM Big Data")'
+        type: string
+      uid:
+        description: UID de l'événement iCal
         type: string
     type: object
 info:
   contact:
     email: justine.bachelard@ext.uca.fr
     name: Justine Bachelard.
-  description: API to manage users.
+  description: API to manage events.
   title: middleware/example
   version: 1.0.0
 paths:
-  /users:
+  /events:
     get:
-      description: Get all users.
+      description: Get all events.
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.User'
+              $ref: '#/definitions/models.Event'
             type: array
         "500":
           description: Something went wrong
-      summary: Get all users.
+      summary: Get all events.
       tags:
-      - users
-  /users/{id}:
+      - events
+  /events/{id}:
     get:
-      description: Get a user.
+      description: Get an event.
       parameters:
-      - description: User UUID formatted ID
+      - description: Event UUID formatted ID
         in: path
         name: id
         required: true
@@ -43,14 +65,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/models.Event'
         "422":
           description: Cannot parse id
         "500":
           description: Something went wrong
-      summary: Get a user.
+      summary: Get an event.
       tags:
-      - users
+      - events
 schemes:
 - http
 swagger: "2.0"

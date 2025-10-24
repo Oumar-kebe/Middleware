@@ -1,4 +1,4 @@
-package users
+package events
 
 import (
 	"github.com/gofrs/uuid"
@@ -6,45 +6,63 @@ import (
 	"middleware/example/internal/models"
 )
 
-func GetAllUsers() ([]models.User, error) {
+func GetAllEvents() ([]models.Event, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	rows, err := db.Query("SELECT * FROM users")
+	rows, err := db.Query("SELECT * FROM events")
 	helpers.CloseDB(db)
 	if err != nil {
 		return nil, err
 	}
 
-	// parsing datas in object slice
-	users := []models.User{}
+	events := []models.Event{}
 	for rows.Next() {
-		var data models.User
-		err = rows.Scan(&data.Id, &data.Name)
+		var data models.Event
+		err = rows.Scan(
+			&data.Id, 
+			&data.UID, 
+			&data.Summary, 
+			&data.Description, 
+			&data.Location,
+			&data.StartDate,
+			&data.EndDate,
+			&data.LastModified,
+			&data.AgendaId,
+		)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, data)
+		events = append(events, data)
 	}
-	// don't forget to close rows
 	_ = rows.Close()
 
-	return users, err
+	return events, err
 }
 
-func GetUserById(id uuid.UUID) (*models.User, error) {
+func GetEventById(id uuid.UUID) (*models.Event, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	row := db.QueryRow("SELECT * FROM users WHERE id=?", id.String())
+	row := db.QueryRow("SELECT * FROM events WHERE id=?", id.String())
 	helpers.CloseDB(db)
 
-	var user models.User
-	err = row.Scan(&user.Id, &user.Name)
+	var event models.Event
+	err = row.Scan(
+		&event.Id, 
+		&event.UID, 
+		&event.Summary, 
+		&event.Description, 
+		&event.Location,
+		&event.StartDate,
+		&event.EndDate,
+		&event.LastModified,
+		&event.AgendaId,
+	)
 	if err != nil {
 		return nil, err
 	}
-	return &user, err
+	return &event, err
 }
